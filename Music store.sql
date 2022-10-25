@@ -83,23 +83,19 @@ alter table item add constraint item_sale_FK Foreign key(sale_id) references sal
 
 insert into company values(1, 'Seven Eight');
 insert into company values(2, 'Nuclear Blast');
-delete from company where company_id = 1;
 
 insert into genre values(1, 'pop-folk');
 insert into genre values(2, 'metal');
 insert into genre values(3, 'rap');
-delete from genre where genre_id = 3;
 
 insert into performer values(1, 'Slavi Trifonov');
 insert into performer values(2, 'Joakim Broaden');
 insert into performer values(3, 'Eminem');
-delete from performer where performer_id = 3;
 
 insert into p_type values(1, 'CD');
 insert into p_type values(2, 'Disk');
 insert into p_type values(3, 'Blue-Ray');
-update p_type set p_type_name = 'DVD' where p_type_id = 2;
-delete from p_type where p_type_id = 3;
+--update p_type set p_type_name = 'DVD' where p_type_id = 2;
 
 insert into product values(1, '15-AUG-2002', 'Nie Produlzhavame', 16.50, 1, 1, 1, 2);
 insert into product values(2, '8-SEP-2000', 'Vaxpopuli', 12.60, 1, 1, 1, 1);
@@ -110,20 +106,17 @@ insert into product values(6, '3-JAN-2005', 'Last Stand', 19.99, 2, 2, 2, 1);
 insert into product values(7, '1-AUG-2001', 'Til I Collapse', 10.20, 3, 2, 3, 2);
 insert into product values(8, '30-JUN-2009', 'Rap God', 10.20, 3, 2, 3, 1);
 insert into product values(9, '19-MAR-2002', 'Without me', 23.99, 3, 2, 3, 3);
-update product set price = 17.99 where product_id = 8;
-delete from product where product_id = 9;
+--update product set price = 17.99 where product_id = 8;
 
 insert into e_position values(1, 'clerk');
 insert into e_position values(2, 'manager');
 insert into e_position values(3, 'advertiser');
-delete from e_position where e_position_id = 3;
 
 insert into employee values(1, 'Hristo Ivanov', '0893140560', 1);
 insert into employee values(2, 'Georgi Lazarov', '0893535187', 1);
 insert into employee values(3, 'Boris Petkov', '0873037189', 2);
 insert into employee values(4, 'Hristo Plamenov', '0863137123', 3);
 update employee set employee_name = 'Petar Vasilev' where employee_id = 4;
-delete from employee where employee_id = 4;
 
 insert into customer values(1, 'Bozhana Stancheva', 'Vasil Levski 15', '0817534480');
 insert into customer values(2, 'Petar Stoilov', 'tsar Samuil 4', '0847339085');
@@ -132,31 +125,30 @@ insert into customer values(4, 'Todor Petkov', 'Studetska 9', '0827572692');
 insert into customer values(5, 'Kolyo Grigorov', 'Hristo Botev 12', '0893084083');
 insert into customer values(6, 'Mustafa Cholakov', 'Saedinenie 8', '0823981029');
 update customer set address = 'Trakia 3' where customer_id = 3;
-delete from customer where customer_id = 6;
 
-insert into sale values(1, '22-AUG-2021', 1, 1);
-insert into sale values(2, '19-SEP-2021', 2, 1);
-insert into sale values(3, '20-SEP-2021', 1, 2);
-insert into sale values(4, '20-SEP-2021', 3, 1);
-insert into sale values(5, '22-SEP-2021', 1, 6);
-insert into sale values(6, '25-SEP-2021', 2, 5);
-insert into sale values(7, '26-SEP-2021', 1, 3);
-insert into sale values(8, '28-SEP-2021', 4, 4);
-insert into sale values(9, '28-SEP-2021', 1, 3);
-insert into sale values(10, '2-OCT-2021', 2, 1);
-insert into sale values(11, '5-OCT-2021', 1, 2);
-insert into sale values(12, '6-OCT-2021', 2, 5);
-insert into sale values(13, '8-OCT-2021', 1, 6);
-insert into sale values(14, '8-OCT-2021', 2, 2);
-insert into sale values(15, '10-OCT-2021', 1, 1);
-insert into sale values(16, '11-OCT-2021', 2, 1);
-insert into sale values(17, '15-OCT-2021', 1, 2);
-insert into sale values(18, '19-OCT-2021', 2, 5);
-insert into sale values(19, '20-OCT-2021', 4, 1);
-insert into sale values(20, '20-OCT-2021', 2, 2);
-insert into sale values(21, '21-OCT-2021', 2, 3);
-update sale set customer_id = 2 where sale_id = 4;
-delete from sale where sale_id = 21;
+insert into sale values(1, '22-AUG-2022', 1, 1);
+insert into sale values(2, '19-SEP-2022', 2, 1);
+insert into sale values(3, '20-SEP-2022', 1, 2);
+insert into sale values(4, '20-SEP-2022', 3, 1);
+insert into sale values(5, '22-SEP-2022', 1, 6);
+insert into sale values(6, '25-SEP-2022', 2, 5);
+insert into sale values(7, '26-SEP-2022', 1, 3);
+insert into sale values(8, '28-SEP-2022', 4, 4);
+insert into sale values(9, '28-SEP-2022', 1, 3);
+insert into sale values(10, '2-OCT-2022', 2, 1);
+insert into sale values(11, '5-OCT-2022', 1, 2);
+insert into sale values(12, '6-OCT-2022', 2, 5);
+insert into sale values(13, '8-OCT-2022', 1, 6);
+insert into sale values(14, '8-OCT-2022', 2, 2);
+insert into sale values(15, '10-OCT-2022', 1, 1);
+insert into sale values(16, '11-OCT-2022', 2, 1);
+insert into sale values(17, '15-OCT-2022', 1, 2);
+insert into sale values(18, '19-OCT-2022', 2, 5);
+insert into sale values(19, '20-OCT-2022', 4, 1);
+insert into sale values(20, '20-OCT-2022', 2, 2);
+insert into sale values(21, '21-OCT-2022', 2, 3);
+--update sale set customer_id = 2 where sale_id = 4;
+--delete from sale where sale_id = 21;
 
 insert into item values(2, 9, 1);
 insert into item values(1, 1, 1);
@@ -192,8 +184,8 @@ insert into item values(1, 3, 20);
 insert into item values(4, 6, 21);
 insert into item values(3, 8, 21);
 insert into item values(4, 9, 21);
-update item set quantity=2 where sale_id = 15;
-delete from item where product_id = 9 and sale_id =21;
+--update item set quantity=2 where sale_id = 15;
+--delete from item where product_id = 9 and sale_id =21;
 
 
 select p.product_id, p.year_published, p.product_name, p.price, g.genre_name, c.company_name, pe.performer_name, t.p_type_name
@@ -229,7 +221,7 @@ select * from (select s.sale_date, c.customer_name, e.employee_name, p.year_publ
 t.p_type_name from sale s join customer c on c.customer_id = s.customer_id 
 join employee e on s.employee_id = e.employee_id join item i on i.sale_id = s.sale_id join product p on p.product_id = i.product_id
 join genre g on g.genre_id = p.genre_id join p_type t on p.p_type_id = t.p_type_id join performer pe on pe.performer_id = p.performer_id
-join company c on c.company_id = p.company_id order by s.sale_date desc) where rownum <=5 order by employee_name;
+join company c on c.company_id = p.company_id where extract(year from s.sale_date) = 2022 order by s.sale_date desc) where rownum <=5 order by employee_name;
 
 --3
 select i.quantity, p.product_name, t.p_type_name, s.sale_date, pe.performer_name, c.company_name from item i
@@ -244,3 +236,13 @@ join product p on i.product_id = p.product_id join sale s on i.sale_id = s.sale_
 on p.p_type_id = t.p_type_id join customer c on s.customer_id = c.customer_id join performer pe on p.performer_id = pe.performer_id 
 join company c on p.company_id = c.company_id where s.sale_date between '&start_date' and '&end_date'
 order by c.customer_name, s.sale_date;
+
+
+
+
+
+BEGIN
+    FOR i IN (SELECT customer_name,phone_number FROM customer)LOOP
+     DBMS_OUTPUT.PUT_LINE(i.customer_name || ' phone number:' || i.phone_number);
+    END LOOP;
+END;
