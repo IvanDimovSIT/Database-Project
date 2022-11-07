@@ -390,5 +390,246 @@ BEGIN
 END;
 
 
+CREATE OR REPLACE PROCEDURE UpdateCompany(
+in_company_id IN company.company_id%TYPE,
+in_company_name IN company.company_name%TYPE
+) IS
+BEGIN
+    UPDATE company set company_name = in_company_name WHERE company_id = in_company_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateCustomer(
+in_customer_id IN customer.customer_id%TYPE,
+in_customer_name IN customer.customer_name%TYPE,
+in_address IN customer.address%TYPE,
+in_phone_number IN customer.phone_number%TYPE
+) IS
+BEGIN
+    UPDATE customer SET customer_name = in_customer_name, address = in_address, phone_number = in_phone_number
+    WHERE customer_id = in_customer_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateE_position(
+in_e_position_id IN e_position.e_position_id%TYPE,
+in_position_name IN e_position.position_name%TYPE
+) IS
+BEGIN
+    UPDATE e_position SET position_name = in_position_name WHERE e_position_id = in_e_position_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateEmployee(
+in_employee_id IN employee.employee_id%TYPE,
+in_employee_name IN employee.employee_name%TYPE,
+in_phone_number IN employee.phone_number%TYPE,
+in_e_position_id IN employee.e_position_id%TYPE
+) IS
+BEGIN
+    UPDATE employee SET employee_name = in_employee_name, phone_number = in_phone_number, e_position_id = in_e_position_id
+    WHERE employee_id = in_employee_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateGenre(
+in_genre_id IN genre.genre_id%TYPE,
+in_genre_name IN genre.genre_name%TYPE
+) IS
+BEGIN
+    UPDATE genre SET genre_name = in_genre_name WHERE genre_id = in_genre_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateItem(
+in_quantity IN item.quantity%TYPE,
+in_product_id IN item.product_id%TYPE,
+in_sale_id IN item.sale_id%TYPE
+)IS
+BEGIN
+    UPDATE item SET quantity = in_quantity WHERE product_id = in_product_id AND sale_id = in_sale_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateP_type(
+in_p_type_id IN p_type.p_type_id%TYPE,
+in_p_type_name IN p_type.p_type_name%TYPE
+) IS
+BEGIN
+    UPDATE p_type SET p_type_name = in_p_type_name WHERE p_type_id = in_p_type_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdatePerformer(
+in_performer_id IN performer.performer_id%TYPE,
+in_performer_name IN performer.performer_name%TYPE
+) IS
+BEGIN
+    UPDATE performer SET performer_name = in_performer_name WHERE performer_id = in_performer_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateProduct(
+in_product_id IN product.product_id%TYPE,
+in_year_published IN product.year_published%TYPE,
+in_product_name IN product.product_name%TYPE,
+in_price IN product.price%TYPE,
+in_genre_id IN product.genre_id%TYPE,
+in_company_id IN product.company_id%TYPE,
+in_performer_id IN product.performer_id%TYPE,
+in_p_type_id IN product.p_type_id%TYPE
+) IS
+BEGIN
+    UPDATE product SET year_published = in_year_published, product_name = in_product_name, price = in_price,
+    genre_id = in_genre_id, company_id = in_company_id, performer_id = in_performer_id, p_type_id = in_p_type_id
+    WHERE product_id = in_product_id;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateSale(
+in_sale_id IN sale.sale_id%TYPE,
+in_sale_date IN sale.sale_date%TYPE,
+in_employee_id IN sale.employee_id%TYPE,
+in_customer_id IN sale.customer_id%TYPE
+) IS
+BEGIN
+    UPDATE sale SET sale_date = in_sale_date, employee_id = in_employee_id, customer_id = in_customer_id
+    WHERE sale_id = in_sale_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteCompany(
+in_company_id IN company.company_id%TYPE
+) IS
+BEGIN
+    DELETE FROM company WHERE company_id = in_company_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteCustomer(
+in_customer_id IN customer.customer_id%TYPE
+) IS
+BEGIN
+    DELETE FROM customer WHERE customer_id = in_customer_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteE_position(
+in_e_position_id IN e_position.e_position_id%TYPE
+) IS
+BEGIN
+    DELETE FROM e_position WHERE e_position_id = in_e_position_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteEmployee(
+in_employee_id IN employee.employee_id%TYPE
+) IS
+BEGIN
+    DELETE FROM employee WHERE employee_id = in_employee_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteGenre(
+in_genre_id IN genre.genre_id%TYPE
+) IS
+BEGIN
+    DELETE FROM genre WHERE genre_id = in_genre_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteItem(
+in_product_id IN item.product_id%TYPE,
+in_sale_id IN item.sale_id%TYPE
+) IS
+BEGIN
+    DELETE FROM item WHERE product_id = in_product_id AND sale_id = in_sale_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteP_type(
+in_p_type_id IN p_type.p_type_id%TYPE
+) IS
+BEGIN
+    DELETE FROM p_type WHERE p_type_id = in_p_type_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeletePerformer(
+in_performer_id IN performer.performer_id%TYPE
+) IS
+BEGIN
+    DELETE FROM performer WHERE performer_id = in_performer_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteProduct(
+in_product_id IN product.product_id%TYPE
+) IS
+BEGIN
+    DELETE FROM product WHERE product_id = in_product_id;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteSale(
+in_sale_id IN sale.sale_id%TYPE
+) IS
+BEGIN
+    DELETE FROM sale WHERE sale_id = in_sale_id;
+END;
 
 
+SET SERVEROUTPUT ON
+CREATE OR REPLACE PROCEDURE SearchByType(
+in_type IN p_type.p_type_name%TYPE
+) IS
+BEGIN
+    FOR v_prod IN (select p.product_id, p.year_published, p.product_name, p.price, g.genre_name, c.company_name, pe.performer_name, t.p_type_name
+    from product p join genre g on p.genre_id = g.genre_id join company c on p.company_id = c.company_id join performer pe
+    on p.performer_id = pe.performer_id join p_type t on p.p_type_id = t.p_type_id where lower(t.p_type_name) like lower(in_type))
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Id:'||v_prod.product_id||' Year published:'||v_prod.year_published||' Name:'||v_prod.product_name
+        || ' Genre:' || v_prod.genre_name || ' Company:' || v_prod.company_name || ' Performer:' || v_prod.performer_name ||
+        ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+
+CREATE OR REPLACE PROCEDURE SearchByPerformer(
+in_performer IN performer.performer_name%TYPE
+) IS
+BEGIN
+    FOR v_prod IN (select p.product_id, p.year_published, p.product_name, p.price, g.genre_name, c.company_name, pe.performer_name, t.p_type_name
+from product p join genre g on p.genre_id = g.genre_id join company c on p.company_id = c.company_id join performer pe
+on p.performer_id = pe.performer_id join p_type t on p.p_type_id = t.p_type_id where lower(pe.performer_name) like lower(in_performer))
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Id:'||v_prod.product_id||' Year published:'||v_prod.year_published||' Name:'||v_prod.product_name
+        || ' Genre:' || v_prod.genre_name || ' Company:' || v_prod.company_name || ' Performer:' || v_prod.performer_name ||
+        ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+CREATE OR REPLACE PROCEDURE SearchByGenre(
+in_genre IN genre.genre_name%TYPE
+) IS
+BEGIN
+    FOR v_prod IN (select p.product_id, p.year_published, p.product_name, p.price, g.genre_name, c.company_name, pe.performer_name, t.p_type_name
+from product p join genre g on p.genre_id = g.genre_id join company c on p.company_id = c.company_id join performer pe
+on p.performer_id = pe.performer_id join p_type t on p.p_type_id = t.p_type_id where lower(g.genre_name) like lower(in_genre))
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Id:'||v_prod.product_id||' Year published:'||v_prod.year_published||' Name:'||v_prod.product_name
+        || ' Genre:' || v_prod.genre_name || ' Company:' || v_prod.company_name || ' Performer:' || v_prod.performer_name ||
+        ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+CREATE OR REPLACE PROCEDURE SearchByYear(
+in_year IN NUMBER
+) IS
+BEGIN
+    FOR v_prod IN (select p.product_id, p.year_published, p.product_name, p.price, g.genre_name, c.company_name, pe.performer_name, t.p_type_name
+from product p join genre g on p.genre_id = g.genre_id join company c on p.company_id = c.company_id join performer pe
+on p.performer_id = pe.performer_id join p_type t on p.p_type_id = t.p_type_id where extract(year from p.year_published) = in_year)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Id:'||v_prod.product_id||' Year published:'||v_prod.year_published||' Name:'||v_prod.product_name
+        || ' Genre:' || v_prod.genre_name || ' Company:' || v_prod.company_name || ' Performer:' || v_prod.performer_name ||
+        ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+CREATE OR REPLACE PROCEDURE SearchByCompany(
+in_company IN company.company_name%TYPE
+) IS
+BEGIN
+    FOR v_prod IN (select p.product_id, p.year_published, p.product_name, p.price, g.genre_name, c.company_name, pe.performer_name, t.p_type_name
+from product p join genre g on p.genre_id = g.genre_id join company c on p.company_id = c.company_id join performer pe
+on p.performer_id = pe.performer_id join p_type t on p.p_type_id = t.p_type_id where lower(c.company_name) like lower(in_company))
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Id:'||v_prod.product_id||' Year published:'||v_prod.year_published||' Name:'||v_prod.product_name
+        || ' Genre:' || v_prod.genre_name || ' Company:' || v_prod.company_name || ' Performer:' || v_prod.performer_name ||
+        ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+Execute SearchByCompany('Seven Eight');
