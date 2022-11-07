@@ -632,4 +632,69 @@ on p.performer_id = pe.performer_id join p_type t on p.p_type_id = t.p_type_id w
     END LOOP;
 END;
 
-Execute SearchByCompany('Seven Eight');
+CREATE OR REPLACE PROCEDURE QueryEmployee(
+in_name IN employee.employee_name%TYPE
+) IS
+BEGIN
+    FOR v_prod IN (select s.sale_date, c.customer_name, e.employee_name, p.year_published, p.product_name, p.price,g.genre_name, c.company_name, pe.performer_name,
+    t.p_type_name from sale s join customer c on c.customer_id = s.customer_id 
+    join employee e on s.employee_id = e.employee_id join item i on i.sale_id = s.sale_id join product p on p.product_id = i.product_id
+    join genre g on g.genre_id = p.genre_id join p_type t on p.p_type_id = t.p_type_id join performer pe on pe.performer_id = p.performer_id
+    join company c on c.company_id = p.company_id
+    where lower(e.employee_name) like lower(in_name) order by s.sale_date)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('On date:'||v_prod.sale_date||' customer:'||v_prod.customer_name||' Name:'||v_prod.product_name
+        || ' Published on:' || v_prod.year_published || ' price:' || v_prod.price || ' Genre:' || v_prod.genre_name ||
+        ' Company:' || v_prod.company_name || ' Performed by:' || v_prod.performer_name || ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+CREATE OR REPLACE PROCEDURE QueryLastSales IS
+BEGIN
+    FOR v_prod IN (select * from (select s.sale_date, c.customer_name, e.employee_name, p.year_published, p.product_name, p.price,g.genre_name, c.company_name, pe.performer_name,
+t.p_type_name from sale s join customer c on c.customer_id = s.customer_id 
+join employee e on s.employee_id = e.employee_id join item i on i.sale_id = s.sale_id join product p on p.product_id = i.product_id
+join genre g on g.genre_id = p.genre_id join p_type t on p.p_type_id = t.p_type_id join performer pe on pe.performer_id = p.performer_id
+join company c on c.company_id = p.company_id where extract(year from s.sale_date) = extract(year from sysdate) order by s.sale_date desc) where rownum <=5 order by employee_name
+)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('On date:'||v_prod.sale_date||' customer:'||v_prod.customer_name ||' employee:'||v_prod.employee_name 
+        ||' Name:'||v_prod.product_name
+        || ' Published on:' || v_prod.year_published || ' price:' || v_prod.price || ' Genre:' || v_prod.genre_name ||
+        ' Company:' || v_prod.company_name || ' Performed by:' || v_prod.performer_name || ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+CREATE OR REPLACE PROCEDURE QueryCustomer(
+in_name IN customer.customer_name%TYPE
+) IS
+BEGIN
+    FOR v_prod IN (select i.quantity, p.product_name, t.p_type_name, s.sale_date, pe.performer_name, c.company_name from item i
+join product p on i.product_id = p.product_id join sale s on i.sale_id = s.sale_id join p_type t
+on p.p_type_id = t.p_type_id join customer c on s.customer_id = c.customer_id join performer pe on p.performer_id = pe.performer_id 
+join company c on p.company_id = c.company_id where lower(c.customer_name) like lower(in_name)
+order by t.p_type_name, s.sale_date)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('On date:'||v_prod.sale_date||' Quantity:'||v_prod.quantity||' Name:'||v_prod.product_name ||
+        ' Company:' || v_prod.company_name || ' Performed by:' || v_prod.performer_name || ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+CREATE OR REPLACE PROCEDURE QuerySalesInRange(
+in_start IN sale.sale_date%TYPE,
+in_end IN sale.sale_date%TYPE
+) IS
+BEGIN
+    FOR v_prod IN (select i.quantity, p.product_name, t.p_type_name, c.company_name, pe.performer_name, s.sale_date, c.customer_name from item i
+join product p on i.product_id = p.product_id join sale s on i.sale_id = s.sale_id join p_type t
+on p.p_type_id = t.p_type_id join customer c on s.customer_id = c.customer_id join performer pe on p.performer_id = pe.performer_id 
+join company c on p.company_id = c.company_id where s.sale_date between in_start and in_end
+order by c.customer_name, s.sale_date)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('On date:'||v_prod.sale_date||' customer:'||v_prod.customer_name||' Quantity:'|| v_prod.quantity 
+        || ' Name:'||v_prod.product_name ||
+        ' Company:' || v_prod.company_name || ' Performed by:' || v_prod.performer_name || ' Type:' || v_prod.p_type_name);
+    END LOOP;
+END;
+
+Execute QuerySalesInRange('12-OCT-2022', '20-OCT-2022');
