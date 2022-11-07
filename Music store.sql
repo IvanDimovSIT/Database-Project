@@ -239,10 +239,156 @@ order by c.customer_name, s.sale_date;
 
 
 
-
-
+CREATE SEQUENCE company_seq START WITH 3;
+CREATE OR REPLACE TRIGGER comapany_id_auto_trigger
+BEFORE INSERT ON company FOR EACH ROW WHEN (NEW.company_id IS NULL)
 BEGIN
-    FOR i IN (SELECT customer_name,phone_number FROM customer)LOOP
-     DBMS_OUTPUT.PUT_LINE(i.customer_name || ' phone number:' || i.phone_number);
-    END LOOP;
+    :NEW.company_id := company_seq.NEXTVAL;
 END;
+
+CREATE SEQUENCE customer_seq START WITH 7;
+CREATE OR REPLACE TRIGGER customer_id_auto_trigger
+BEFORE INSERT ON customer FOR EACH ROW WHEN (NEW.customer_id IS NULL)
+BEGIN
+    :NEW.customer_id := customer_seq.NEXTVAL;
+END;
+
+CREATE SEQUENCE e_position_seq START WITH 4;
+CREATE OR REPLACE TRIGGER e_position_id_auto_trigger
+BEFORE INSERT ON e_position FOR EACH ROW WHEN (NEW.e_position_id IS NULL)
+BEGIN
+    :NEW.e_position_id := e_position_seq.NEXTVAL;
+END;
+
+CREATE SEQUENCE employee_seq START WITH 5;
+CREATE OR REPLACE TRIGGER employee_id_auto_trigger
+BEFORE INSERT ON employee FOR EACH ROW WHEN (NEW.employee_id IS NULL)
+BEGIN
+    :NEW.employee_id := employee_seq.NEXTVAL;
+END;
+
+CREATE SEQUENCE genre_seq START WITH 4;
+CREATE OR REPLACE TRIGGER genre_id_auto_trigger
+BEFORE INSERT ON genre FOR EACH ROW WHEN (NEW.genre_id IS NULL)
+BEGIN
+    :NEW.genre_id := genre_seq.NEXTVAL;
+END;
+
+CREATE SEQUENCE p_type_seq START WITH 4;
+CREATE OR REPLACE TRIGGER p_type_id_auto_trigger
+BEFORE INSERT ON p_type FOR EACH ROW WHEN (NEW.p_type_id IS NULL)
+BEGIN
+    :NEW.p_type_id := p_type_seq.NEXTVAL;
+END;
+
+CREATE SEQUENCE performer_seq START WITH 4;
+CREATE OR REPLACE TRIGGER performer_id_auto_trigger
+BEFORE INSERT ON performer FOR EACH ROW WHEN (NEW.performer_id IS NULL)
+BEGIN
+    :NEW.performer_id := performer_seq.NEXTVAL;
+END;
+
+CREATE SEQUENCE product_seq START WITH 10;
+CREATE OR REPLACE TRIGGER product_id_auto_trigger
+BEFORE INSERT ON product FOR EACH ROW WHEN (NEW.product_id IS NULL)
+BEGIN
+    :NEW.product_id := product_seq.NEXTVAL;
+END;
+
+CREATE SEQUENCE sale_seq START WITH 22;
+CREATE OR REPLACE TRIGGER sale_id_auto_trigger
+BEFORE INSERT ON sale FOR EACH ROW WHEN (NEW.sale_id IS NULL)
+BEGIN
+    :NEW.sale_id := sale_seq.NEXTVAL;
+END;
+
+CREATE OR REPLACE PROCEDURE InsertCompany(
+in_company_name IN company.company_name%TYPE 
+) IS
+BEGIN
+    INSERT INTO company(company_name) values(in_company_name);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertCustomer(
+in_customer_name IN customer.customer_name%TYPE,
+in_address IN customer.address%TYPE,
+in_phone_number IN customer.phone_number%TYPE
+) IS
+BEGIN
+    INSERT INTO customer(customer_name, address, phone_number) values(in_customer_name, in_address, in_phone_number);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertE_position(
+in_position_name IN e_position.position_name%TYPE
+) IS
+BEGIN
+    INSERT INTO e_position(position_name) values(in_position_name);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertEmployee(
+in_employee_name IN employee.employee_name%TYPE,
+in_phone_number IN employee.phone_number%TYPE,
+in_e_position_id IN employee.e_position_id%TYPE
+) IS
+BEGIN
+    INSERT INTO employee(employee_name, phone_number, employee.e_position_id) 
+    VALUES(in_employee_name, in_phone_number, in_e_position_id);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertGenre(
+in_genre_name IN genre.genre_name%TYPE
+) IS
+BEGIN
+    INSERT INTO genre(genre_name) VALUES(in_genre_name);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertItem(
+in_quantity IN item.quantity%TYPE,
+in_product_id IN item.product_id%TYPE,
+in_sale_id IN item.sale_id%TYPE
+) IS
+BEGIN
+    INSERT INTO item(quantity, product_id, sale_id) VALUES(in_quantity, in_product_id, in_sale_id);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertP_type(
+in_p_type_name IN p_type.p_type_name%TYPE
+) IS
+BEGIN
+    INSERT INTO p_type(p_type_name) VALUES(in_p_type_name);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertPerformer(
+in_performer_name IN performer.performer_name%TYPE
+) IS
+BEGIN
+    INSERT INTO performer(performer_name) VALUES(in_performer_name);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertProduct(
+in_year_published IN product.year_published%TYPE,
+in_product_name IN product.product_name%TYPE,
+in_price IN product.price%TYPE,
+in_genre_id IN product.genre_id%TYPE,
+in_company_id IN product.company_id%TYPE,
+in_performer_id IN product.performer_id%TYPE,
+in_p_type_id IN product.p_type_id%TYPE
+) IS
+BEGIN
+    INSERT INTO product(year_published, product_name, price, genre_id, company_id, performer_id, p_type_id) 
+    VALUES(in_year_published, in_product_name, in_price, in_genre_id, in_company_id, in_performer_id, in_p_type_id);
+END;
+
+CREATE OR REPLACE PROCEDURE InsertSale(
+in_sale_date IN sale.sale_date%TYPE,
+in_employee_id IN sale.employee_id%TYPE,
+in_customer_id IN sale.customer_id%TYPE
+) IS
+BEGIN
+    INSERT INTO sale(sale_date, employee_id, customer_id) 
+    VALUES(in_sale_date, in_employee_id, in_customer_id);
+END;
+
+
+
+
